@@ -35,6 +35,7 @@ editor and add your bookmark in the format: title = URL
 (for example google = https://google.com)
 
 Lines that begins with # character are interpreted as comments.
+Lines that begins with * character are interpreted as hidden urls.
 
 Configuration is done by directly editing the script. dmenu is the
 only supported launcher (add your favourite launcher if you want).
