@@ -10,6 +10,8 @@ URL_FILE_NAME=urls
 DMENU_LINE_DISPLAY=8
 # hidden prefix, links that i dont visit so often
 HIDDEN_PREFIX=*
+# snippets prefix, what's after the separator
+SNIPPETS_PREFIX=@
 
 show_usage() {
     printf "bmks: unix bookmark management that sucks less
@@ -21,21 +23,28 @@ bmks ls
 	show all bookmarks
 bmks hidden
 	show hidden bookmarks, links that you don't visit so often
-	prefixed with * by default.
-	example: *google = google.com
+	prefixed with ${HIDDEN_PREFIX} by default.
+	example: ${HIDDEN_PREFIX}google = google.com
 	run with HIDDEN=1 enviroment variable
 bmks dmenu
 	manual switch for displaying bookmarks in dmenu
 bmks clip
 	copies the choosen url to the clipboard and paste it
-	if a text area is available
+	if a text area is available.
+	run with SNIPPETS=1 enviroment variable if you want
+	to copy snippets (snippets as in your email address and etc...)
+	to your clipboard.
 
 To add bookmarks open ${URL_FILE_PATH}${URL_FILE_NAME} in a text
 editor and add your bookmark in the format: title = URL
 (for example google = https://google.com)
 
+the separator could be anything, like (=, -, _, =>, etc...)
+as long as it's in this format: <title> <separator> <url>
+
 Lines that begins with # character are interpreted as comments.
-Lines that begins with * character are interpreted as hidden urls.
+Lines that begins with ${HIDDEN_PREFIX} character are interpreted as hidden urls.
+Lines that begins with ${SNIPPETS_PREFIX} character are snippets you can copy and paste.
 
 Configuration is done by directly editing the script. dmenu is the
 only supported launcher (add your favourite launcher if you want).
@@ -52,12 +61,25 @@ bmks_hidden() {
     grep -vE "#|^$" $URL_FILE_PATH/$URL_FILE_NAME \
 	| sort -u \
 	| grep -E '^\'${HIDDEN_PREFIX}'' \
-	| sed 's/^\'${HIDDEN_PREFIX}'//g'
+	| sed 's/^\'${HIDDEN_PREFIX}'//g' \
+	| sort -u
 }
+
+
+bmks_snippets() {
+    bmks_check
+    grep -vE "#|^$" $URL_FILE_PATH/$URL_FILE_NAME \
+	| sort -u \
+	| grep -E '^\'${SNIPPETS_PREFIX}'' \
+	| sed 's/^\'${SNIPPETS_PREFIX}'//g' \
+	| sort -u
+}
+
 
 bmks_ls() {
     bmks_check
-    grep -vE '#|^$|^\'${HIDDEN_PREFIX}'' $URL_FILE_PATH/$URL_FILE_NAME | sort -u
+    grep -vE '#|^$|^\'${SNIPPETS_PREFIX}'|^\'${HIDDEN_PREFIX}'' \
+	 $URL_FILE_PATH/$URL_FILE_NAME | sort -u
 }
 
 bmks_display() {
@@ -72,11 +94,10 @@ bmks_display() {
 }
 
 bmks_clip() {
-    bmks_ls \
+    ([[ $SNIPPETS -eq 1 ]] && bmks_snippets || bmks_ls) \
 	| dmenu -l ${DMENU_LINE_DISPLAY} \
 	| awk '{print $(NF)}' \
-	| xclip -sel clip \
-	&& xclip -o -sel clip
+	| xclip -sel clip
 }
 
 bmks_check() {
