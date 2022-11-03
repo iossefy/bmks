@@ -61,8 +61,7 @@ bmks_hidden() {
     grep -vE "#|^$" $URL_FILE_PATH/$URL_FILE_NAME \
 	| sort -u \
 	| grep -E '^\'${HIDDEN_PREFIX}'' \
-	| sed 's/^\'${HIDDEN_PREFIX}'//g' \
-	| sort -u
+	| sed 's/^\'${HIDDEN_PREFIX}'//g'
 }
 
 
@@ -71,8 +70,7 @@ bmks_snippets() {
     grep -vE "#|^$" $URL_FILE_PATH/$URL_FILE_NAME \
 	| sort -u \
 	| grep -E '^\'${SNIPPETS_PREFIX}'' \
-	| sed 's/^\'${SNIPPETS_PREFIX}'//g' \
-	| sort -u
+	| sed 's/^\'${SNIPPETS_PREFIX}'//g'
 }
 
 
