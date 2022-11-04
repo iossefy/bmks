@@ -4,6 +4,8 @@ browser independent bookmark manager
 It's a fork of the
 [suckless bmks dmenu script](https://tools.suckless.org/dmenu/scripts/)
 
+type `bmks help` for instructions on how to use.
+
 Example keybindings using [sxhkd](https://github.com/baskerville/sxhkd) config.
 
 ```
