@@ -56,23 +56,13 @@ location there are also variables that can be changed for that. The
 default is ${URL_FILE_PATH}${URL_FILE_NAME}\n"
 }
 
-bmks_hidden() {
+bmks_custom() {
     bmks_check
     grep -vE "#|^$" $URL_FILE_PATH/$URL_FILE_NAME \
 	| sort -u \
-	| grep -E '^\'${HIDDEN_PREFIX}'' \
-	| sed 's/^\'${HIDDEN_PREFIX}'//g'
+	| grep -E '^\'$1'' \
+	| sed 's/^\'$1'//g'
 }
-
-
-bmks_snippets() {
-    bmks_check
-    grep -vE "#|^$" $URL_FILE_PATH/$URL_FILE_NAME \
-	| sort -u \
-	| grep -E '^\'${SNIPPETS_PREFIX}'' \
-	| sed 's/^\'${SNIPPETS_PREFIX}'//g'
-}
-
 
 bmks_ls() {
     bmks_check
@@ -83,16 +73,26 @@ bmks_ls() {
 bmks_display() {
     # bmks_check
     case $PREFERED_LAUNCHER in
-	dmenu) ([[ $HIDDEN -eq 1 ]] && bmks_hidden || bmks_ls) \
-		   | dmenu -l ${DMENU_LINE_DISPLAY} \
-		   | awk '{print $(NF)}' \
-		   | xargs -I '{}' $BROWSER {} ;;
-	# in case if you want to add another launchers
+	dmenu)
+	    (if [ $HIDDEN ]
+	     then
+		 (bmks_custom "$HIDDEN_PREFIX")
+	     else
+		 bmks_ls
+	     fi) \
+		| dmenu -l ${DMENU_LINE_DISPLAY} \
+		| awk '{print $(NF)}' \
+		| xargs -I '{}' $BROWSER {} ;;
     esac
 }
 
 bmks_clip() {
-    ([[ $SNIPPETS -eq 1 ]] && bmks_snippets || bmks_ls) \
+    (if [ $SNIPPETS ]
+     then
+	 (bmks_custom "$SNIPPETS_PREFIX")
+     else
+	 bmks_ls
+     fi) \
 	| dmenu -l ${DMENU_LINE_DISPLAY} \
 	| awk '{print $(NF)}' \
 	| xclip -sel clip
@@ -114,6 +114,6 @@ case "$1" in
     "dmenu") PREFERED_LAUNCHER=$1; bmks_display ;;
     "clip") bmks_clip ;;
     # Filter for links that i dont visit often
-    "hidden") bmks_hidden ;;
+    "hidden") bmks_custom "$HIDDEN_PREFIX" ;;
     *) bmks_display ;;
 esac
