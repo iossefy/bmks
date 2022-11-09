@@ -74,26 +74,24 @@ bmks_display() {
     # bmks_check
     case $PREFERED_LAUNCHER in
 	dmenu)
-	    (if [ $HIDDEN ]
+	    if [ $HIDDEN ]
 	     then
 		 (bmks_custom "$HIDDEN_PREFIX")
 	     else
 		 bmks_ls
-	     fi) \
-		| dmenu -l ${DMENU_LINE_DISPLAY} \
+	    fi | dmenu -l ${DMENU_LINE_DISPLAY} \
 		| awk '{print $(NF)}' \
 		| xargs -I '{}' $BROWSER {} ;;
     esac
 }
 
 bmks_clip() {
-    (if [ $SNIPPETS ]
+    if [ $SNIPPETS ]
      then
 	 (bmks_custom "$SNIPPETS_PREFIX")
      else
 	 bmks_ls
-     fi) \
-	| dmenu -l ${DMENU_LINE_DISPLAY} \
+    fi | dmenu -l ${DMENU_LINE_DISPLAY} \
 	| awk '{print $(NF)}' \
 	| xclip -sel clip
 }
