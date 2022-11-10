@@ -4,9 +4,13 @@ browser independent bookmark manager
 It's a fork of the
 [suckless bmks dmenu script](https://tools.suckless.org/dmenu/scripts/)
 
+## Usage
+
 type `bmks help` for instructions on how to use.
 
-Example keybindings using [sxhkd](https://github.com/baskerville/sxhkd) config.
+### Example keybindings
+
+using [sxhkd](https://github.com/baskerville/sxhkd) config.
 
 ```
 # opens the default ${BROWSER} with the default ${PREFERED_LAUNCHER}
@@ -27,9 +31,26 @@ super + b: c
 	bmks clip
 ```
 
+### example bookmarks file
+
+```text
+### My Websites ###
+
+# Social media
+reddit = https://www.reddit.com
+twitter = https://www.twitter.com
+facebook = https://facebook.com
+
+### Bookmarks i don't visit often ###
+*stackoverflow = https://stackoverflow.com
+
+### Copy Snippets to clipboard ###
+
+@Work Email = myworkemail@example.com
+```
+
 ## license
 i don't really know what license the original code uses since it's not
 mentioned on suckless' site, so i will assume it was public domain.
 
 [Unlicense](./LICENSE)
-
