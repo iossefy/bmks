@@ -66,7 +66,7 @@ bmks_custom() {
 
 bmks_ls() {
     bmks_check
-    grep -vE '#|^$|^\'${SNIPPETS_PREFIX}'|^\'${HIDDEN_PREFIX}'' \
+    grep -vE '#|^$|^'${SNIPPETS_PREFIX}'|^\'${HIDDEN_PREFIX}'' \
 	 $URL_FILE_PATH/$URL_FILE_NAME | sort -u
 }
 
