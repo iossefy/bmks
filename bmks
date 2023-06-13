@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# sort bookmarks
+SORT=false
 # set prefered launcher
 PREFERED_LAUNCHER=dmenu
 # set path where urls will be stored
@@ -44,7 +46,7 @@ as long as it's in this format: <title> <separator> <url>
 
 Lines that begins with # character are interpreted as comments.
 Lines that begins with ${HIDDEN_PREFIX} character are interpreted as hidden urls.
-Lines that begins with ${SNIPPETS_PREFIX} character are snippets you can copy and paste.
+Lines that begins with ${SNIPPETS_PREFIX} character are snippets you can copy to clipboard.
 
 Configuration is done by directly editing the script. dmenu is the
 only supported launcher (add your favourite launcher if you want).
@@ -59,7 +61,7 @@ default is ${URL_FILE_PATH}${URL_FILE_NAME}\n"
 bmks_custom() {
     bmks_check
     grep -vE "#|^$" $URL_FILE_PATH/$URL_FILE_NAME \
-	| sort -u \
+	| ([ $SORT = true ] && sort -u || uniq) \
 	| grep -E '^\'$1'' \
 	| sed 's/^\'$1'//g'
 }
@@ -67,7 +69,7 @@ bmks_custom() {
 bmks_ls() {
     bmks_check
     grep -vE '#|^$|^'${SNIPPETS_PREFIX}'|^\'${HIDDEN_PREFIX}'' \
-	 $URL_FILE_PATH/$URL_FILE_NAME | sort -u
+	 $URL_FILE_PATH/$URL_FILE_NAME | ([ $SORT = true ] && sort -u || uniq)
 }
 
 bmks_display() {
