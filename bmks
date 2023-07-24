@@ -78,7 +78,7 @@ bmks_display() {
 	dmenu)
 	    if [ $HIDDEN ]
 	     then
-		 (bmks_custom "$HIDDEN_PREFIX")
+		 bmks_custom "$HIDDEN_PREFIX"
 	     else
 		 bmks_ls
 	    fi | dmenu -l ${DMENU_LINE_DISPLAY} \
@@ -90,7 +90,7 @@ bmks_display() {
 bmks_clip() {
     if [ $SNIPPETS ]
      then
-	 (bmks_custom "$SNIPPETS_PREFIX")
+	 bmks_custom "$SNIPPETS_PREFIX"
      else
 	 bmks_ls
     fi | dmenu -l ${DMENU_LINE_DISPLAY} \
@@ -99,10 +99,11 @@ bmks_clip() {
 }
 
 bmks_check() {
-    [ ! -s $URL_FILE_PATH/$URL_FILE_NAME ]  \
-	&& printf "%s\n\n" "Error: No bookmarks found to display. Try adding some!" >&2 \
-	&& show_usage \
-	&& return 1
+    [ ! -s $URL_FILE_PATH/$URL_FILE_NAME ] && (
+	printf "%s\n\n" "Error: No bookmarks found to display. Try adding some!" >&2
+	show_usage
+    ) && return 1
+
     return 0
 }
 
