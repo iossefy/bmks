@@ -15,39 +15,26 @@ using [sxhkd](https://github.com/baskerville/sxhkd) config.
 ```
 # opens the default ${BROWSER} with the default ${PREFERED_LAUNCHER}
 # firefox and dmenu
-super + b: b
+super + b; b
 	bmks
 
 # opens the chosen url with chromium using the default ${PREFERED_LAUNCHER}
-super + b: n
+super + b; n
 	BROWSER=chromium bmks
 
 # opens hidden links (links you don't visit often) using the default settings
-super + b: v
+super + b; v
 	HIDDEN=1 bmks
 
 # copies the url to clipboard and paste it if a text area is selected
-super + b: c
+super + b; c
 	bmks clip
 ```
 
-### example bookmarks file
 
-```text
-### My Websites ###
+# urls file
 
-# Social media
-reddit = https://www.reddit.com
-twitter = https://www.twitter.com
-facebook = https://facebook.com
-
-### Bookmarks i don't visit often ###
-*stackoverflow = https://stackoverflow.com
-
-### Copy Snippets to clipboard ###
-
-@Work Email = myworkemail@example.com
-```
+[example bookmarks file](./urls)
 
 ## license
 i don't really know what license the original code uses since it's not

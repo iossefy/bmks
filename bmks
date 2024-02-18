@@ -88,14 +88,17 @@ bmks_display() {
 }
 
 bmks_clip() {
-    if [ $SNIPPETS ]
-     then
-	 bmks_custom "$SNIPPETS_PREFIX"
-     else
-	 bmks_ls
-    fi | dmenu -l ${DMENU_LINE_DISPLAY} \
-	| awk '{print $(NF)}' \
-	| xclip -sel clip
+    case $PREFERED_LAUNCHER in
+	dmenu)
+	    if [ $SNIPPETS ]
+	    then
+		bmks_custom "$SNIPPETS_PREFIX"
+	    else
+		bmks_ls
+	    fi | dmenu -l ${DMENU_LINE_DISPLAY} \
+		| awk '{print $(NF)}' \
+		| xclip -sel clip
+    esac
 }
 
 bmks_check() {

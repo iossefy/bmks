@@ -1,0 +1,28 @@
+#!!BMKS!?
+
+##################################################
+#    _ _   _               _          _ ___      #
+#   | | | | |__  _ __ ___ | | _____  | |__ \     #
+#   | | | | '_ \| '_ ` _ \| |/ / __| | | / /     #
+#   |_|_| | |_) | | | | | |   <\__ \ |_||_|      #
+#   (_|_) |_.__/|_| |_| |_|_|\_\___/ (_)(_)      #
+#                                                #
+#                                                #
+# Syntax                                         #
+#   # Topic keywords                             #
+#   identifier = url                             #
+#   *hidden id = url                             #
+#   @copy me = something to copy to clipboard    #
+#                                                #
+# after bound sign '#' every thing gets ignored. #
+#                                                #
+##################################################
+
+# START HERE
+
+bmks project = https://github.com/m1cR0xf7/bmks
+stackoverflow = https://stackoverflow.com
+
+*github = https://github.com
+
+@email = myemail@example.com
