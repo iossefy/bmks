@@ -3,13 +3,13 @@
 # sort bookmarks
 SORT=false
 # set prefered launcher
-PREFERED_LAUNCHER=dmenu
+PREFERED_LAUNCHER=${PREFERED_LAUNCHER:-dmenu}
 # set path where urls will be stored
 URL_FILE_PATH=~/.config/bmks
 # name of file urls will be stored in
 URL_FILE_NAME=urls
 # number of lines shown in the dmenu
-DMENU_LINE_DISPLAY=8
+MENU_LINE_DISPLAY=8
 # hidden prefix, links that i dont visit so often
 HIDDEN_PREFIX=*
 # snippets prefix, what's after the separator
@@ -30,6 +30,8 @@ bmks hidden
 	run with HIDDEN=1 enviroment variable
 bmks dmenu
 	manual switch for displaying bookmarks in dmenu
+bmks bemenu
+	manual switch for displaying bookmarks in bemenu
 bmks clip
 	copies the choosen url to the clipboard and paste it
 	if a text area is available.
@@ -81,9 +83,19 @@ bmks_display() {
 		 bmks_custom "$HIDDEN_PREFIX"
 	     else
 		 bmks_ls
-	    fi | dmenu -l ${DMENU_LINE_DISPLAY} \
+	    fi | dmenu -l ${MENU_LINE_DISPLAY} \
 		| awk '{print $(NF)}' \
 		| xargs -I '{}' $BROWSER {} ;;
+	bemenu)
+	    if [ $HIDDEN ]
+	     then
+		 bmks_custom "$HIDDEN_PREFIX"
+	     else
+		 bmks_ls
+	    fi | bemenu -l ${MENU_LINE_DISPLAY} \
+		| awk '{print $(NF)}' \
+		| xargs -I '{}' $BROWSER {} ;;
+
     esac
 }
 
@@ -95,9 +107,18 @@ bmks_clip() {
 		bmks_custom "$SNIPPETS_PREFIX"
 	    else
 		bmks_ls
-	    fi | dmenu -l ${DMENU_LINE_DISPLAY} \
+	    fi | dmenu -l ${MENU_LINE_DISPLAY} \
 		| awk '{print $(NF)}' \
-		| xclip -sel clip
+		| xclip -sel clip ;;
+	bemenu)
+	    if [ $SNIPPETS ]
+	    then
+		bmks_custom "$SNIPPETS_PREFIX"
+	    else
+		bmks_ls
+	    fi | bemenu -l ${MENU_LINE_DISPLAY} \
+		| awk '{print $(NF)}' \
+		| wl-copy
     esac
 }
 
@@ -117,8 +138,9 @@ case "$1" in
     "help") show_usage ;;
     "ls") bmks_ls ;;
     "dmenu") PREFERED_LAUNCHER=$1; bmks_display ;;
+    "bemenu") PREFERED_LAUNCHER=$1; bmks_display ;;
     "clip") bmks_clip ;;
     # Filter for links that i dont visit often
     "hidden") bmks_custom "$HIDDEN_PREFIX" ;;
-    *) bmks_display ;;
+    *) bmks_display;;
 esac
